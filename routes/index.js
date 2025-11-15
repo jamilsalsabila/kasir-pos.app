@@ -9,6 +9,9 @@ const productController = require('../controllers/ProductController');
 const customerController = require('../controllers/CustomerController');
 const cartController = require('../controllers/CartController');
 const transactionController = require('../controllers/TransactionController');
+const salesController = require('../controllers/SalesController');
+const profitController = require('../controllers/ProfitController');
+const getDashboardData = require('../controllers/DashboardController');
 
 // MIDDLEWARES
 const {
@@ -26,6 +29,8 @@ const { validateLogin,
     validateCustomer,
     validateCart,
     validateTransaction,
+    validateSales,
+    validateProfit,
 } = require("../utils/validators");
 
 
@@ -188,6 +193,75 @@ const routes = [
         ],
         controller: transactionController.findTransactionByInvoice,
     },
+
+
+    /**
+     * Sales Controller
+     */
+    // RUTE GET SALES
+    {
+        method: 'get',
+        path: '/sales',
+        middlewares: [
+            verifyToken,
+            validateSales,
+            handleValidationErrors
+        ],
+        controller: salesController.filterSales
+    },
+    // RUTE LAPORAN SALES DALAM BENTUK EXCEL
+    {
+        method: 'get',
+        path: '/sales/export',
+        middlewares: [
+            verifyToken,
+            validateSales,
+            handleValidationErrors,
+        ],
+        controller: salesController.exportSales,
+    },
+
+
+    /**
+     * Profit Controller
+     */
+    // RUTE GET PROFIT
+    {
+        method: 'get',
+        path: '/profits',
+        middlewares: [
+            verifyToken,
+            validateProfit,
+            handleValidationErrors,
+        ],
+        controller: profitController.filterProfits,
+    },
+    // RUTE EXPORT PROFIT TO EXCEL
+    {
+        method: 'get',
+        path: '/profits/export',
+        middlewares: [
+            verifyToken,
+            validateProfit,
+            handleValidationErrors,
+        ],
+        controller: profitController.exportProfits,
+    },
+
+
+    /**
+     * Dashboard Controller
+     */
+    // get all necessary data
+    {
+        method: 'get',
+        path: '/dashboard',
+        middlewares: [
+            verifyToken,
+        ],
+        controller: getDashboardData,
+    },
+
 ];
 // =======================
 
